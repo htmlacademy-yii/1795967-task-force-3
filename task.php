@@ -15,7 +15,6 @@ class Task
     public $executorId;
     public $customerId;
     public $status;
-    public $action;
     public $userId;
 
     public function __construct($executorId, $customerId, $status)
@@ -47,48 +46,32 @@ class Task
         ];
     }
 
-    private function getStatus() {
-        switch($this->action):
+    private function getStatusAfterAction($action) {
+        switch($action):
             case self::ACTION_CANCEL:
-                $this->status = self::STATUS_CANCELED;
+                return self::STATUS_CANCELED;
                 break;
             case self::ACTION_RESPOND:
-                $this->status = self::STATUS_IN_WORK;
+                return self::STATUS_IN_WORK;
                 break;
             case self::ACTION_REFUSE:
-                $this->status = self::STATUS_FAILED;
+                return self::STATUS_FAILED;
                 break;
             case self::ACTION_DONE:
-                $this->status = self::STATUS_PERFORMED;
+                return self::STATUS_PERFORMED;
                 break;
             endswitch;
-        return $this->status;
     }
 
-    private function getAction($userId) {
+    private function getAvailableActions() {
         switch($this->status):
             case self::STATUS_NEW:
-                if($userId === $this->customerId):
-                    $this->action = self::ACTION_CANCEL;
-                endif;
-                    break;
-            case self::STATUS_NEW:
-                if($userId === $this->executorId):
-                    $this->action = self::ACTION_RESPOND;
-                endif;
+                return [self::ACTION_CANCEL, self::ACTION_RESPOND];
                     break;
             case self::STATUS_IN_WORK:
-                if($userId === $this->customerId):
-                    $this->action = self::ACTION_DONE;
-                endif;
-                    break;
-            case self::STATUS_IN_WORK:
-                if($userId === $this->executorId):
-                    $this->action = self::ACTION_REFUSE;
-                endif;
+                return [self::ACTION_DONE, self::ACTION_REFUSE];
                     break;
             endswitch;
-        return $this->action;
     }
 }
 

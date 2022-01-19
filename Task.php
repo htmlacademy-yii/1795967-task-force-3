@@ -1,5 +1,4 @@
 <?php
-
 class Task
 {
     public const STATUS_NEW = 'new';
@@ -11,13 +10,13 @@ class Task
     public const ACTION_RESPOND = 'respond';
     public const ACTION_DONE = 'done';
     public const ACTION_REFUSE = 'refuse';
+    public const ACTION_START = 'start';
 
     public $executorId;
     public $customerId;
     public $status;
-    public $userId;
 
-    public function __construct($executorId, $customerId, $status)
+    public function __construct($status, $customerId, $executorId = Null)
     {
         $this->executorId = $executorId;
         $this->customerId = $customerId;
@@ -42,36 +41,51 @@ class Task
             self::ACTION_CANCEL => 'Отменить',
             self::ACTION_RESPOND => 'Откликнуться',
             self::ACTION_DONE => 'Выполнено',
-            self::ACTION_REFUSE => 'Отказаться'
+            self::ACTION_REFUSE => 'Отказаться',
+            self::ACTION_START => 'Запустить'
+
         ];
     }
 
-    private function getStatusAfterAction($action) {
-        switch($action):
+    public function getStatusAfterAction($actions) {
+        switch($actions):
             case self::ACTION_CANCEL:
-                return self::STATUS_CANCELED;
-                break;
+               return self::STATUS_CANCELED;
             case self::ACTION_RESPOND:
                 return self::STATUS_IN_WORK;
-                break;
             case self::ACTION_REFUSE:
                 return self::STATUS_FAILED;
-                break;
             case self::ACTION_DONE:
                 return self::STATUS_PERFORMED;
-                break;
+            default:
+               return $actions;
             endswitch;
     }
 
-    private function getAvailableActions() {
+    public function getAvailableActions($userId)
+    {
+        $actions = [];
+       if ($userId === $this->customerId) {
         switch($this->status):
             case self::STATUS_NEW:
-                return [self::ACTION_CANCEL, self::ACTION_RESPOND];
-                    break;
+                $actions[] = self::ACTION_CANCEL;
+                break;
             case self::STATUS_IN_WORK:
-                return [self::ACTION_DONE, self::ACTION_REFUSE];
+                $actions[] = self::ACTION_DONE;
+                break;
+            endswitch;
+       }
+        if ($userId === $this->executorId) {
+            switch($this->status):
+                case self::STATUS_NEW:
+                    $actions[] = self::ACTION_RESPOND;
+                    break;
+                case self::STATUS_IN_WORK:
+                    $actions[] = self::ACTION_REFUSE;
                     break;
             endswitch;
+        }
+        return $actions;
     }
 }
 

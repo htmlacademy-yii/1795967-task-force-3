@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Unit;
+namespace Unit;
 use PHPUnit\Framework\TestCase;
 use Task;
 
@@ -18,7 +18,7 @@ class TaskTest extends TestCase
         $this->assertEquals('performed', $status);
 
         $task = new Task(Task::STATUS_NEW, 0,1);
-        $status = $task->getStatusAfterAction(Task::ACTION_RESPOND);
+        $status = $task->getStatusAfterAction(Task::ACTION_START);
         $this->assertEquals('in_work', $status);
 
         $task = new Task(Task::STATUS_IN_WORK, 0, 1);
@@ -34,7 +34,7 @@ class TaskTest extends TestCase
 
         $task = new Task(Task::STATUS_NEW, 1);
         $actions = $task->getAvailableActions($task->customerId);
-        $this->assertEquals(['cancel'], $actions);
+        $this->assertEquals(['cancel', 'start'], $actions);
 
         $task = new Task(Task::STATUS_IN_WORK, 1);
         $actions = $task->getAvailableActions($task->executorId);

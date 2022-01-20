@@ -40,10 +40,9 @@ class Task
         return [
             self::ACTION_CANCEL => 'Отменить',
             self::ACTION_RESPOND => 'Откликнуться',
-            self::ACTION_DONE => 'Выполнено',
+            self::ACTION_DONE => 'Завершить',
             self::ACTION_REFUSE => 'Отказаться',
-            self::ACTION_START => 'Запустить'
-
+            self::ACTION_START => 'Запустить',
         ];
     }
 
@@ -51,7 +50,7 @@ class Task
         switch($actions):
             case self::ACTION_CANCEL:
                return self::STATUS_CANCELED;
-            case self::ACTION_RESPOND:
+            case self::ACTION_START:
                 return self::STATUS_IN_WORK;
             case self::ACTION_REFUSE:
                 return self::STATUS_FAILED;
@@ -69,6 +68,7 @@ class Task
         switch($this->status):
             case self::STATUS_NEW:
                 $actions[] = self::ACTION_CANCEL;
+                $actions[] = self::ACTION_START;
                 break;
             case self::STATUS_IN_WORK:
                 $actions[] = self::ACTION_DONE;

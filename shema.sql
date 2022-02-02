@@ -1,0 +1,112 @@
+--CREATE DATABASE task-force_67 DEFAULT CHARACTER SET UTF8 DEFAULT COLLATE UTF8_GENERAL_CI;
+
+--USE task-force_67;
+
+CREATE TABLE cities
+(
+  id   INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL UNIQUE,
+);
+
+CREATE TABLE users
+(
+  id                INT AUTO_INCREMENT PRIMARY KEY,
+  name              VARCHAR(255) NOT NULL,
+  email             VARCHAR(50)  NOT NULL UNIQUE,
+  password          varchar(60)  NOT NULL,
+  birthday          DATETIME,
+  phone             VARCHAR(20),
+  telegram          VARCHAR(50),
+  info              TEXT,
+  is_executor       BOOLEAN,
+  city_id           INT          NOT NULL,
+  registration_date DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (city_id) REFERENCES cities (id),
+);
+
+CREATE TABLE categories
+(
+  id   INT AUTO_INCREMENT PRIMARY KEY,
+  name varchar(100) NOT NULL
+);
+
+CREATE TABLE tasks
+(
+  id           INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  title        VARCHAR(50) NOT NULL,
+  description  TEXT        NOT NULL,
+  category_id  INT         NOT NULL,
+  status       INT         NOT NULL,
+  price        INT         NOT NULL,
+  created_date DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  due_date     DATE,
+  user_id      INT         NOT NULL,
+  city_id      INT         NOT NULL,
+  file_id      INT,
+  location     VARCHAR(100),
+  FOREIGN KEY (user_id) REFERENCES users (id),
+  FOREIGN KEY (city_id) REFERENCES cities (id),
+  FOREIGN KEY (category_id) REFERENCES categories (id)
+);
+
+CREATE TABLE user_categories
+(
+  id          INT AUTO_INCREMENT PRIMARY KEY,
+  user_id     INT NOT NULL,
+  category_id INT NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users (id),
+  FOREIGN KEY (category_id) REFERENCES categories (id),
+);
+
+CREATE TABLE user_avatars
+(
+  id          INT AUTO_INCREMENT PRIMARY KEY,
+  user_id     INT NOT NULL,
+  avatar_path VARCHAR(128) UNIQUE,
+  FOREIGN KEY (user_id) REFERENCES users (id),
+);
+
+CREATE TABLE ratings
+(
+  id      INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  rating  INT NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users (id)
+);
+
+CREATE TABLE responses
+(
+  id        INT  NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  user_id   INT  NOT NULL,
+  avatar_id INT  NOT NULL,
+  task_id   INT  NOT NULL,
+  rating_id INT  NOT NULL,
+  comment   TEXT NOT NULL,
+  price     INT  NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users (id),
+  FOREIGN KEY (task_id) REFERENCES tasks (id),
+  FOREIGN KEY (rating_id) REFERENCES ratings (id)
+
+);
+
+CREATE TABLE profiles
+(
+  id        INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  user_id   INT NOT NULL,
+  avatar_id INT NOT NULL,
+  city_id   INT NOT NULL,
+  rating_id INT NOT NULL,
+  FOREIGN KEY (rating_id) REFERENCES ratings (id),
+  FOREIGN KEY (user_id) REFERENCES users (id),
+  FOREIGN KEY (city_id) REFERENCES cities (id)
+
+
+);
+
+CREATE TABLE files
+(
+  id        INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  file_path VARCHAR(128) NOT NULL UNIQUE,
+  task_id   INT          NOT NULL,
+  FOREIGN KEY (task_id) REFERENCES tasks (id)
+);

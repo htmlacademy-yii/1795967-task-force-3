@@ -4,31 +4,39 @@
 
 CREATE TABLE cities
 (
-  id   INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(255) NOT NULL UNIQUE,
+  id        INT AUTO_INCREMENT PRIMARY KEY,
+  name      VARCHAR(255)   NOT NULL UNIQUE,
+  latitude  decimal(10, 7) NOT NULL,
+  longitude decimal(10, 7) NOT NULL
 );
 
 CREATE TABLE users
 (
-  id                INT AUTO_INCREMENT PRIMARY KEY,
-  name              VARCHAR(255) NOT NULL,
-  email             VARCHAR(50)  NOT NULL UNIQUE,
-  password          varchar(60)  NOT NULL,
-  birthday          DATETIME,
-  phone             VARCHAR(20),
-  telegram          VARCHAR(50),
-  info              TEXT,
-  is_executor       BOOLEAN,
-  city_id           INT          NOT NULL,
-  registration_date DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  id             INT AUTO_INCREMENT PRIMARY KEY,
+  name           VARCHAR(255) NOT NULL,
+  email          VARCHAR(50)  NOT NULL UNIQUE,
+  password       varchar(60)  NOT NULL,
+  birthday       DATETIME,
+  phone          VARCHAR(20),
+  rating         INT,
+  telegram       VARCHAR(50),
+  info           TEXT,
+  is_executor    BOOLEAN,
+  city_id        INT          NOT NULL,
+  avatar_file_id INT,
+  create_date    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (city_id) REFERENCES cities (id),
+  FOREIGN KEY (avatar_file_id) REFERENCES files (id)
+
 );
 
 CREATE TABLE categories
 (
   id   INT AUTO_INCREMENT PRIMARY KEY,
-  name varchar(100) NOT NULL
+  name varchar(100) NOT NULL,
+  code varchar(255) NOT NULL
 );
+
 
 CREATE TABLE tasks
 (
@@ -37,76 +45,57 @@ CREATE TABLE tasks
   description  TEXT        NOT NULL,
   category_id  INT         NOT NULL,
   status       INT         NOT NULL,
-  price        INT         NOT NULL,
-  created_date DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  price        INT,
+  create_date  DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   due_date     DATE,
   user_id      INT         NOT NULL,
   city_id      INT         NOT NULL,
+  latitude_id  INT,
+  longitude_id INT,
   file_id      INT,
   location     VARCHAR(100),
   FOREIGN KEY (user_id) REFERENCES users (id),
+  FOREIGN KEY (category_id) REFERENCES categories (id),
   FOREIGN KEY (city_id) REFERENCES cities (id),
-  FOREIGN KEY (category_id) REFERENCES categories (id)
+  FOREIGN KEY (latitude_id) REFERENCES cities (id),
+  FOREIGN KEY (longitude_id) REFERENCES cities (id)
+
 );
 
 CREATE TABLE user_categories
 (
   id          INT AUTO_INCREMENT PRIMARY KEY,
-  user_id     INT NOT NULL,
+  executor_id INT NOT NULL,
   category_id INT NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES users (id),
-  FOREIGN KEY (category_id) REFERENCES categories (id),
-);
-
-CREATE TABLE user_avatars
-(
-  id          INT AUTO_INCREMENT PRIMARY KEY,
-  user_id     INT NOT NULL,
-  avatar_path VARCHAR(128) UNIQUE,
-  FOREIGN KEY (user_id) REFERENCES users (id),
-);
-
-CREATE TABLE ratings
-(
-  id      INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,
-  rating  INT NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES users (id)
+  FOREIGN KEY (executor_id) REFERENCES users (id),
+  FOREIGN KEY (category_id) REFERENCES categories (id)
 );
 
 CREATE TABLE responses
 (
-  id        INT  NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  user_id   INT  NOT NULL,
-  avatar_id INT  NOT NULL,
-  task_id   INT  NOT NULL,
-  rating_id INT  NOT NULL,
-  comment   TEXT NOT NULL,
-  price     INT  NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES users (id),
+  id          INT  NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  executor_id INT  NOT NULL,
+  task_id     INT  NOT NULL,
+  comment     TEXT NOT NULL,
+  price       INT  NOT NULL,
+  FOREIGN KEY (executor_id) REFERENCES users (id),
   FOREIGN KEY (task_id) REFERENCES tasks (id),
-  FOREIGN KEY (rating_id) REFERENCES ratings (id)
-
 );
 
-CREATE TABLE profiles
-(
-  id        INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  user_id   INT NOT NULL,
-  avatar_id INT NOT NULL,
-  city_id   INT NOT NULL,
-  rating_id INT NOT NULL,
-  FOREIGN KEY (rating_id) REFERENCES ratings (id),
-  FOREIGN KEY (user_id) REFERENCES users (id),
-  FOREIGN KEY (city_id) REFERENCES cities (id)
-
-
-);
 
 CREATE TABLE files
 (
-  id        INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  file_path VARCHAR(128) NOT NULL UNIQUE,
-  task_id   INT          NOT NULL,
-  FOREIGN KEY (task_id) REFERENCES tasks (id)
+  id   INT           NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  path VARCHAR(1000) NOT NULL UNIQUE
+);
+
+CREATE TABLE reviews
+(
+  id          INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  task_id     INT NOT NULL,
+  executor_id INT NOT NULL,
+  grade       INT,
+  comment     TEXT,
+  FOREIGN KEY (task_id) REFERENCES tasks (id),
+  FOREIGN KEY (executor_id) REFERENCES users (id),
 );

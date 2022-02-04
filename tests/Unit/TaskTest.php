@@ -1,9 +1,7 @@
 <?php
 namespace Unit;
 use PHPUnit\Framework\TestCase;
-use Task;
-
-require_once __DIR__. '/../../Task.php';
+use TaskForce\Task;
 
 class TaskTest extends TestCase
 {

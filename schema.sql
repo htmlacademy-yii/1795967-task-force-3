@@ -1,6 +1,6 @@
---CREATE DATABASE task-force_67 DEFAULT CHARACTER SET UTF8 DEFAULT COLLATE UTF8_GENERAL_CI;
+--CREATE DATABASE taskforce_67 DEFAULT CHARACTER SET UTF8 DEFAULT COLLATE UTF8_GENERAL_CI;
 
---USE task-force_67;
+--USE taskforce_67;
 
 CREATE TABLE cities
 (
@@ -12,22 +12,20 @@ CREATE TABLE cities
 
 CREATE TABLE users
 (
-  id             INT AUTO_INCREMENT PRIMARY KEY,
-  name           VARCHAR(255) NOT NULL,
-  email          VARCHAR(50)  NOT NULL UNIQUE,
-  password       varchar(60)  NOT NULL,
-  birthday       DATETIME,
-  phone          VARCHAR(20),
-  rating         INT,
-  telegram       VARCHAR(50),
-  info           TEXT,
-  is_executor    BOOLEAN,
-  city_id        INT          NOT NULL,
-  avatar_file_id INT,
-  create_date    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (city_id) REFERENCES cities (id),
-  FOREIGN KEY (avatar_file_id) REFERENCES files (id)
-
+  id          INT AUTO_INCREMENT PRIMARY KEY,
+  name        VARCHAR(255)  NOT NULL,
+  email       VARCHAR(50)   NOT NULL UNIQUE,
+  password    varchar(60)   NOT NULL,
+  birthday    DATETIME,
+  phone       VARCHAR(20),
+  rating      INT,
+  telegram    VARCHAR(50),
+  info        TEXT,
+  is_executor BOOLEAN,
+  city_id     INT           NOT NULL,
+  avatar_path VARCHAR(1000) NOT NULL UNIQUE,
+  create_date DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (city_id) REFERENCES cities (id)
 );
 
 CREATE TABLE categories
@@ -58,8 +56,8 @@ CREATE TABLE tasks
   FOREIGN KEY (category_id) REFERENCES categories (id),
   FOREIGN KEY (city_id) REFERENCES cities (id),
   FOREIGN KEY (latitude_id) REFERENCES cities (id),
-  FOREIGN KEY (longitude_id) REFERENCES cities (id)
-
+  FOREIGN KEY (longitude_id) REFERENCES cities (id),
+  FOREIGN KEY (file_id) REFERENCES files (id)
 );
 
 CREATE TABLE user_categories
@@ -79,7 +77,7 @@ CREATE TABLE responses
   comment     TEXT NOT NULL,
   price       INT  NOT NULL,
   FOREIGN KEY (executor_id) REFERENCES users (id),
-  FOREIGN KEY (task_id) REFERENCES tasks (id),
+  FOREIGN KEY (task_id) REFERENCES tasks (id)
 );
 
 
@@ -97,5 +95,5 @@ CREATE TABLE reviews
   grade       INT,
   comment     TEXT,
   FOREIGN KEY (task_id) REFERENCES tasks (id),
-  FOREIGN KEY (executor_id) REFERENCES users (id),
+  FOREIGN KEY (executor_id) REFERENCES users (id)
 );

@@ -48,15 +48,11 @@ CREATE TABLE tasks
   due_date     DATE,
   user_id      INT         NOT NULL,
   city_id      INT         NOT NULL,
-  latitude_id  INT,
-  longitude_id INT,
   file_id      INT,
   location     VARCHAR(100),
   FOREIGN KEY (user_id) REFERENCES users (id),
   FOREIGN KEY (category_id) REFERENCES categories (id),
   FOREIGN KEY (city_id) REFERENCES cities (id),
-  FOREIGN KEY (latitude_id) REFERENCES cities (id),
-  FOREIGN KEY (longitude_id) REFERENCES cities (id),
   FOREIGN KEY (file_id) REFERENCES files (id)
 );
 

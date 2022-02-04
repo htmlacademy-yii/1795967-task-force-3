@@ -35,6 +35,11 @@ CREATE TABLE categories
   code varchar(255) NOT NULL
 );
 
+CREATE TABLE files
+(
+  id   INT           NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  path VARCHAR(1000) NOT NULL UNIQUE
+);
 
 CREATE TABLE tasks
 (
@@ -74,13 +79,6 @@ CREATE TABLE responses
   price       INT  NOT NULL,
   FOREIGN KEY (executor_id) REFERENCES users (id),
   FOREIGN KEY (task_id) REFERENCES tasks (id)
-);
-
-
-CREATE TABLE files
-(
-  id   INT           NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  path VARCHAR(1000) NOT NULL UNIQUE
 );
 
 CREATE TABLE reviews

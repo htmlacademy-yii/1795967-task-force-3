@@ -4,9 +4,9 @@ use PHPUnit\Framework\TestCase;
 use TaskForce\Models\Task;
 use TaskForce\Action\ActionCancel;
 use TaskForce\Action\ActionRespond;
-use TaskForce\Action\ActionStart;
-use TaskForce\Action\ActionDone;
-use TaskForce\Action\ActionRefuse;
+//use TaskForce\Action\ActionStart;
+//use TaskForce\Action\ActionDone;
+//use TaskForce\Action\ActionRefuse;
 
 
 class TaskTest extends TestCase
@@ -32,9 +32,9 @@ class TaskTest extends TestCase
 
     public function testGetAvailableActions()
     {
-        $task = new Task(Task::STATUS_NEW, 1);
-        $action = $task->getAvailableActions($task->customerId);
-        $this->assertEquals([ , $action);
+        $task = new Task(Task::STATUS_NEW, 0, 1);
+        $actions = $task->getAvailableActions($task->customerId);
+        $this->assertEquals([new ActionRespond()], $actions);
 //
 //        $task = new Task(Task::STATUS_NEW, 1);
 //        $actions = $task->getAvailableActions($task->customerId);

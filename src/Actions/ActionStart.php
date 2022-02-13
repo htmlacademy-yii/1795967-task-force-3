@@ -22,7 +22,6 @@ class ActionStart extends AbstractAction
         if ($task->customerId !== $userId) {
             return false;
         }
-
         return true;
     }
 }

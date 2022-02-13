@@ -71,7 +71,7 @@ class Task
         endswitch;
     }
 
-    public function getAvailableActions($userId): array
+    public function getAvailableActions($userId)
     {
         $actions = [];
 

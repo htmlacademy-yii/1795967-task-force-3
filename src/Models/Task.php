@@ -1,11 +1,12 @@
 <?php
+
 namespace TaskForce\Models;
 
 use TaskForce\Actions\ActionCancel;
-use TaskForce\Actions\ActionRespond;
-use TaskForce\Actions\ActionStart;
 use TaskForce\Actions\ActionDone;
 use TaskForce\Actions\ActionRefuse;
+use TaskForce\Actions\ActionRespond;
+use TaskForce\Actions\ActionStart;
 
 class Task
 {
@@ -93,7 +94,6 @@ class Task
         if (ActionRefuse::checkAvailable($this, $userId)) {
             $actions[] = new ActionRefuse();
         }
-
         return $actions;
     }
 }

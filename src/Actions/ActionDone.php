@@ -1,9 +1,8 @@
 <?php
 
 namespace TaskForce\Actions;
+
 use TaskForce\Models\Task;
-
-
 
 class ActionDone extends AbstractAction
 {

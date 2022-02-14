@@ -2,11 +2,9 @@
 
 namespace TaskForce\Actions;
 
-use TaskForce\Actions\AbstractAction;
 use TaskForce\Models\Task;
 
 class ActionCancel extends AbstractAction
-
 {
     public function __construct()
     {

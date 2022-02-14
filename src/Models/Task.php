@@ -1,12 +1,11 @@
 <?php
-
 namespace TaskForce\Models;
 
-use TaskForce\Action\ActionCancel;
-use TaskForce\Action\ActionRespond;
-use TaskForce\Action\ActionStart;
-use TaskForce\Action\ActionDone;
-use TaskForce\Action\ActionRefuse;
+use TaskForce\Actions\ActionCancel;
+use TaskForce\Actions\ActionRespond;
+use TaskForce\Actions\ActionStart;
+use TaskForce\Actions\ActionDone;
+use TaskForce\Actions\ActionRefuse;
 
 class Task
 {

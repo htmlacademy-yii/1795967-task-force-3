@@ -1,7 +1,9 @@
 <?php
 
-namespace TaskForce\Action;
+namespace TaskForce\Actions;
+//use Task;
 use TaskForce\Models\Task;
+
 class ActionRespond extends AbstractAction
 {
 public function __construct() {

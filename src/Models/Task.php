@@ -1,5 +1,12 @@
 <?php
-namespace TaskForce;
+
+namespace TaskForce\Models;
+
+use TaskForce\Actions\ActionCancel;
+use TaskForce\Actions\ActionDone;
+use TaskForce\Actions\ActionRefuse;
+use TaskForce\Actions\ActionRespond;
+use TaskForce\Actions\ActionStart;
 
 class Task
 {
@@ -20,9 +27,9 @@ class Task
 
     public function __construct($status, $customerId, $executorId = Null)
     {
-        $this->executorId = $executorId;
-        $this->customerId = $customerId;
         $this->status = $status;
+        $this->customerId = $customerId;
+        $this->executorId = $executorId;
 
     }
 
@@ -48,10 +55,11 @@ class Task
         ];
     }
 
-    public function getStatusAfterAction($actions) {
-        switch($actions):
+    public function getStatusAfterAction($actions)
+    {
+        switch ($actions):
             case self::ACTION_CANCEL:
-               return self::STATUS_CANCELED;
+                return self::STATUS_CANCELED;
             case self::ACTION_START:
                 return self::STATUS_IN_WORK;
             case self::ACTION_REFUSE:
@@ -59,33 +67,32 @@ class Task
             case self::ACTION_DONE:
                 return self::STATUS_PERFORMED;
             default:
-               return $actions;
-            endswitch;
+                return $actions;
+        endswitch;
     }
 
     public function getAvailableActions($userId)
     {
         $actions = [];
-       if ($userId === $this->customerId) {
-        switch($this->status):
-            case self::STATUS_NEW:
-                $actions[] = self::ACTION_CANCEL;
-                $actions[] = self::ACTION_START;
-                break;
-            case self::STATUS_IN_WORK:
-                $actions[] = self::ACTION_DONE;
-                break;
-            endswitch;
-       }
-        if ($userId === $this->executorId) {
-            switch($this->status):
-                case self::STATUS_NEW:
-                    $actions[] = self::ACTION_RESPOND;
-                    break;
-                case self::STATUS_IN_WORK:
-                    $actions[] = self::ACTION_REFUSE;
-                    break;
-            endswitch;
+
+        if (ActionCancel::checkAvailable($this, $userId)) {
+            $actions[] = new ActionCancel();
+        }
+
+        if (ActionRespond::checkAvailable($this, $userId)) {
+            $actions[] = new ActionRespond();
+        }
+
+        if (ActionStart::checkAvailable($this, $userId)) {
+            $actions[] = new ActionStart();
+        }
+
+        if (ActionDone::checkAvailable($this, $userId)) {
+            $actions[] = new ActionDone();
+        }
+
+        if (ActionRefuse::checkAvailable($this, $userId)) {
+            $actions[] = new ActionRefuse();
         }
         return $actions;
     }

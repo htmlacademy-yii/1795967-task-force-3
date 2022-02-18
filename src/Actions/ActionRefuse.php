@@ -7,7 +7,7 @@ use TaskForce\Models\Task;
 
 class ActionRefuse extends AbstractAction
 {
-    public function __construct()
+    public function __construct(string $name, string $code)
     {
         $this->name = 'Отказаться';
         $this->code = 'refuse';

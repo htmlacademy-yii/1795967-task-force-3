@@ -7,7 +7,7 @@ use TaskForce\Models\Task;
 
 class ActionStart extends AbstractAction
 {
-    public function __construct()
+    public function __construct(string $name, string $code)
     {
         $this->name = 'Запустить';
         $this->code = 'start';

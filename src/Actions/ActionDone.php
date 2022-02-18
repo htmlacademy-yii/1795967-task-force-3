@@ -6,7 +6,7 @@ use TaskForce\Models\Task;
 
 class ActionDone extends AbstractAction
 {
-    public function __construct()
+    public function __construct(string $name, string $code)
     {
         $this->name = 'Завершить';
         $this->code = 'done';

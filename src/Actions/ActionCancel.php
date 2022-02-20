@@ -7,7 +7,7 @@ use TaskForce\Models\Task;
 
 class ActionCancel extends AbstractAction
 {
-    public function __construct(string $name, string $code)
+    public function __construct()
     {
         $this->name = 'Отменить';
         $this->code = 'cancel';

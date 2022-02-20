@@ -1,17 +1,25 @@
 <?php
 
-namespace Unit;
+namespace Unit\Models;
 
 use PHPUnit\Framework\TestCase;
+use TaskForce\Actions\ActionCancel;
 use TaskForce\Actions\ActionDone;
 use TaskForce\Actions\ActionRefuse;
 use TaskForce\Actions\ActionRespond;
-use TaskForce\Actions\ActionCancel;
 use TaskForce\Actions\ActionStart;
+use TaskForce\Exceptions\ExecutorIsCustomerException;
+use TaskForce\Exceptions\IncorrectActionException;
+use TaskForce\Exceptions\IncorrectStatusException;
 use TaskForce\Models\Task;
 
 class TaskTest extends TestCase
 {
+    /**
+     * @throws IncorrectStatusException
+     * @throws IncorrectActionException
+     * @throws ExecutorIsCustomerException
+     */
     public function testGetStatusAfterAction()
     {
         $task = new Task(Task::STATUS_NEW, 1);
@@ -31,6 +39,10 @@ class TaskTest extends TestCase
         $this->assertEquals('failed', $status);
     }
 
+    /**
+     * @throws IncorrectStatusException
+     * @throws ExecutorIsCustomerException
+     */
     public function testGetAvailableActions()
     {
         $task = new Task(Task::STATUS_NEW, 1);
